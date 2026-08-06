@@ -1,13 +1,13 @@
 .hero {
   position: relative;
-  min-height: 92svh;
+  min-height: 72svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   gap: 20px;
-  padding-top: 64px;
+  padding-top: 48px;
   overflow: hidden;
 }
 
@@ -39,11 +39,21 @@
 }
 
 .hero-eyebrow {
-  font-family: var(--mono);
+  font-family: var(--heading);
+  color: var(--text-h);
+  letter-spacing: -0.5px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.hero-eyebrow span {
   color: var(--accent);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero-eyebrow {
+    font-size: 22px;
+  }
 }
 
 .hero h1 {
