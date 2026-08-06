@@ -62,20 +62,18 @@ export default function Projects() {
   const [openId, setOpenId] = useState(null)
 
   return (
-    <section id="projects" className="projects snap-page">
-      <div className="snap-page-inner">
-        <h2>Projects</h2>
-        <div className="project-list">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              isOpen={openId === project.id}
-              onToggle={() => setOpenId(openId === project.id ? null : project.id)}
-            />
-          ))}
-        </div>
+    <div id="projects" className="projects">
+      <h2>Projects</h2>
+      <div className="project-list">
+        {projects.map((project) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            isOpen={openId === project.id}
+            onToggle={() => setOpenId(openId === project.id ? null : project.id)}
+          />
+        ))}
       </div>
-    </section>
+    </div>
   )
 }

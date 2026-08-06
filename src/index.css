@@ -113,3 +113,9 @@ section {
   max-width: 1100px;
   margin: 0 auto;
 }
+
+.page-two {
+  overflow-y: auto;
+  align-items: stretch;
+  justify-content: flex-start;
+}

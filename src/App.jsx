@@ -6,8 +6,12 @@ function App() {
   return (
     <>
       <Hero />
-      <Projects />
-      <Contact />
+      <section className="page-two snap-page">
+        <div className="snap-page-inner">
+          <Projects />
+          <Contact />
+        </div>
+      </section>
     </>
   )
 }

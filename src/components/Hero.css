@@ -1,7 +1,15 @@
 .hero {
   position: relative;
   text-align: center;
-  gap: 20px;
+  gap: 14px;
+  justify-content: flex-start;
+  padding-top: 16vh;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 12vh;
+  }
 }
 
 .hero-glow {
@@ -37,10 +45,6 @@
   letter-spacing: -0.5px;
   font-size: 28px;
   font-weight: 700;
-}
-
-.hero-eyebrow span {
-  color: var(--accent);
 }
 
 @media (max-width: 768px) {

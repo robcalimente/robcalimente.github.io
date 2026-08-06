@@ -3,7 +3,7 @@ import './Contact.css'
 
 export default function Contact() {
   return (
-    <section id="contact" className="contact snap-page">
+    <div id="contact" className="contact">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -49,6 +49,6 @@ export default function Contact() {
           LinkedIn
         </a>
       </motion.div>
-    </section>
+    </div>
   )
 }

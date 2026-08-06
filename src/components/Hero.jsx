@@ -13,7 +13,7 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Rob <span>Calimente</span>
+        Rob Calimente
       </motion.p>
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
