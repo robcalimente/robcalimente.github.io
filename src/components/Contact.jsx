@@ -42,10 +42,10 @@ export default function Contact() {
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <a href="https://github.com/" target="_blank" rel="noreferrer">
+        <a href="https://github.com/robcalimente" target="_blank" rel="noreferrer">
           GitHub
         </a>
-        <a href="https://linkedin.com/" target="_blank" rel="noreferrer">
+        <a href="https://www.linkedin.com/in/robcalimente/" target="_blank" rel="noreferrer">
           LinkedIn
         </a>
       </motion.div>
