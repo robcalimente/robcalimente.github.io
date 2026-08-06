@@ -2,12 +2,12 @@ export const projects = [
   {
     id: 'f1-predictor',
     title: 'F1 Predictive Model',
-    tagline: 'Predicting driver/team performance by track type using historical + 2026 season data',
+    tagline: 'Predicting driver/team performance by track archetype, from 2018-2026 F1 data',
     tags: ['Python', 'ML', 'Data Engineering'],
-    status: 'planned',
+    status: 'built',
     summary:
-      'Uses FastF1 and historical Ergast data to model how drivers and teams perform across track archetypes (street circuits vs. classic elevation-heavy circuits). Interactive Plotly dashboard for exploring predictions by race.',
-    links: { repo: '', demo: '' },
+      'Three LightGBM models predict qualifying pace, finishing position, and points per driver per race. Splits driver skill (a slow signal that holds across cars) from team form (a fast signal that shifts within a season) instead of blending them into one lookback window. Chronological walk-forward validated. Live dashboard shows next-race predictions and a full predicted-vs-actual history.',
+    links: { repo: 'https://github.com/robcalimente/f1-predictor', demo: 'https://robcalimente.github.io/f1-predictor/' },
   },
   {
     id: 'tri-dashboard',
