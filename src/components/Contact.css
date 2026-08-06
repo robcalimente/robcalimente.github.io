@@ -1,0 +1,41 @@
+.contact {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 120px;
+}
+
+.contact h2 {
+  font-size: 32px;
+}
+
+.contact-sub {
+  color: var(--text);
+  max-width: 480px;
+}
+
+.contact-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.social-links {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.social-links a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
