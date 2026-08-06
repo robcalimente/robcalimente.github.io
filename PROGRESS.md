@@ -70,14 +70,16 @@ by hand.
 - [x] Contact section merged into page 2 alongside Projects (not its own snap page)
 - [x] Live and publicly reachable
 
+## Done (cont.)
+
+- [x] Resume PDF added at `public/resume.pdf` (copied from
+      `Documents/Work/Job Applications/_master/Calimente_MasterResume.pdf`)
+- [x] Social links fixed — GitHub now `github.com/robcalimente`, LinkedIn now
+      `linkedin.com/in/robcalimente`
+
 ## Not done yet — in priority order
 
-1. **Resume PDF is missing.** `Contact.jsx` links to `/resume.pdf`, which doesn't exist
-   in `public/` — this link currently 404s. Needs an actual resume file dropped into
-   `public/resume.pdf`.
-2. **Social links are placeholders.** `Contact.jsx` GitHub/LinkedIn links point to bare
-   `github.com/` and `linkedin.com/` — need Rob's actual profile URLs.
-3. **All 4 project entries in `src/data/projects.js` are placeholders** (`status:
+1. **All 4 project entries in `src/data/projects.js` are placeholders** (`status:
    'planned'`, empty `links.repo`/`links.demo`) except TriCoach's description, which is
    accurate since that app already exists. Build order agreed with Rob:
    1. **F1 predictive model** — historical + 2026 season data (FastF1 library),
@@ -101,7 +103,7 @@ by hand.
    As each project repo gets built, update its entry in `src/data/projects.js`
    (`status: 'built'`, real `links.repo`, `links.demo` if applicable) and swap the
    placeholder `summary` for something specific to what was actually built.
-4. Once GitHub's Actions outage clears, decide whether to switch back to Actions-based
+2. Once GitHub's Actions outage clears, decide whether to switch back to Actions-based
    auto-deploy (see Deployment section above) or keep the manual `npm run deploy` flow.
 
 ## Preferences to respect going forward
