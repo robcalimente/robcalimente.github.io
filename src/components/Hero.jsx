@@ -4,7 +4,7 @@ import './Hero.css'
 
 export default function Hero() {
   return (
-    <section id="hero" className="hero">
+    <section id="hero" className="hero snap-page">
       <ParticleField />
       <div className="hero-glow" />
       <motion.p
@@ -30,8 +30,9 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        On-device iOS apps, ML dashboards, RAG systems. A portfolio of things I
-        built because I was curious.
+        I build the whole thing: the pipeline, the model, the interface someone
+        actually taps. Mobile, web, AI, doesn't matter, I'll figure it out. This
+        is just what happens when I get curious about something and don't stop.
       </motion.p>
       <motion.div
         className="hero-cta"

@@ -1,5 +1,13 @@
 .projects {
   text-align: center;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding-top: 72px;
+}
+
+.projects .snap-page-inner {
+  text-align: center;
 }
 
 .projects h2 {
