@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
+import ParticleField from './ParticleField'
 import './Hero.css'
 
 export default function Hero() {
   return (
     <section id="hero" className="hero">
+      <ParticleField />
       <div className="hero-glow" />
       <motion.p
         className="hero-eyebrow"
