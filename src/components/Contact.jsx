@@ -19,7 +19,7 @@ export default function Contact() {
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        Open to opportunities &mdash; reach out directly or find me elsewhere.
+        Open to opportunities. Reach out directly or find me elsewhere.
       </motion.p>
       <motion.div
         className="contact-links"

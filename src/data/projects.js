@@ -16,7 +16,7 @@ export const projects = [
     tags: ['React', 'Data Viz', 'API'],
     status: 'planned',
     summary:
-      'Pulls from the intervals.icu API to visualize workout history, pace/power trends over time, and CTL/ATL/TSB training load — a browser-based companion to the TriCoach iOS app.',
+      'Pulls from the intervals.icu API to visualize workout history, pace/power trends over time, and CTL/ATL/TSB training load. A browser-based companion to the TriCoach iOS app.',
     links: { repo: '', demo: '' },
   },
   {
@@ -26,7 +26,7 @@ export const projects = [
     tags: ['AI', 'RAG', 'LLMs'],
     status: 'planned',
     summary:
-      'Explores how RAG can surface relevant context from patient histories — medications, encounters, visits — using Synthea-generated synthetic EHR data to stay compliance-safe while modeling a real healthcare use case.',
+      'Explores how RAG can surface relevant context from patient histories: medications, encounters, visits. Uses Synthea-generated synthetic EHR data to stay compliance-safe while modeling a real healthcare use case.',
     links: { repo: '', demo: '' },
   },
   {

@@ -30,8 +30,8 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        From on-device iOS apps to ML dashboards to RAG systems &mdash; a portfolio
-        of things I built because I was curious.
+        On-device iOS apps, ML dashboards, RAG systems. A portfolio of things I
+        built because I was curious.
       </motion.p>
       <motion.div
         className="hero-cta"

@@ -19,10 +19,9 @@ export default function About() {
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        I like building things end to end &mdash; from the data pipeline to the
-        model to the interface someone actually touches. This site is a running
-        log of side projects across mobile, web, and AI, built to learn by
-        shipping rather than by reading about it.
+        I build the whole thing: the pipeline, the model, the interface someone
+        actually taps. Mobile, web, AI, doesn't matter, I'll figure it out. This
+        is just what happens when I get curious about something and don't stop.
       </motion.p>
     </section>
   )
