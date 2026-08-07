@@ -1,15 +1,5 @@
 export const projects = [
   {
-    id: 'catan-generator',
-    title: 'Catan Board Generator',
-    tagline: 'A fair-by-default random board generator for base and 5-6 player Catan',
-    tags: ['React', 'TypeScript', 'SVG'],
-    status: 'built',
-    summary:
-      'Generates full base-game (19-tile) and 5-6 Player Extension (30-tile) boards with configurable fairness rules solved via constraint-satisfaction backtracking, not blind shuffle-and-reject: no matching resources adjacent, no 6/8s adjacent or duplicated per resource, and an optional pip-intersection cap. Every board is a reproducible permalink. Original illustrated SVG art, no assets traced from the real game.',
-    links: { repo: 'https://github.com/robcalimente/catan-generator', demo: 'https://robcalimente.github.io/catan-generator/' },
-  },
-  {
     id: 'f1-predictor',
     title: 'F1 Predictive Model',
     tagline: 'Predicting driver/team performance by track archetype, from 2018-2026 F1 data',
@@ -48,5 +38,15 @@ export const projects = [
     summary:
       'Builds and adapts swim/bike/run training plans against intervals.icu data, with workout-specific fueling guidance and on-device Apple Intelligence coaching notes layered on top of a fully auditable, rule-based training engine (CTL/ATL/TSB load tracking, periodization, template selection).',
     links: { repo: '', demo: '' },
+  },
+  {
+    id: 'catan-generator',
+    title: 'Catan Board Generator',
+    tagline: 'A fair-by-default random board generator for base and 5-6 player Catan',
+    tags: ['React', 'TypeScript', 'SVG'],
+    status: 'built',
+    summary:
+      'Generates full base-game (19-tile) and 5-6 Player Extension (30-tile) boards with configurable fairness rules solved via constraint-satisfaction backtracking, not blind shuffle-and-reject: no matching resources adjacent, no 6/8s adjacent or duplicated per resource, and an optional pip-intersection cap. Every board is a reproducible permalink. Original illustrated SVG art, no assets traced from the real game.',
+    links: { repo: 'https://github.com/robcalimente/catan-generator', demo: 'https://robcalimente.github.io/catan-generator/' },
   },
 ]
