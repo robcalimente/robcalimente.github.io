@@ -63,20 +63,45 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
       boards via constraint-satisfaction backtracking (needed a most-constrained-
       variable heuristic — plain shuffle-and-reject wasn't reliable/fast enough once
       several fairness rules stack), with five configurable fairness toggles including
-      a pip-intersection cap, fixed/random ports, PNG export, seed-based shareable
-      permalinks, animated tile reveal, original SVG illustrated art (no assets traced
-      from the real game), unofficial-fan-tool disclaimer footer. Vitest suite (10
-      tests: engine invariants + a jsdom render smoke test), lint, and production build
-      all clean. Pushed to GitHub and deployed to GitHub Pages (2026-08-07). Portfolio
-      card updated to `status: 'built'` with real links.
+      a pip-intersection cap, fixed/random ports, a "robber starts in the center" toggle
+      (pins the desert to the board's middle before the solver runs), PNG export,
+      seed-based shareable permalinks, animated tile reveal, original SVG illustrated
+      art (no assets traced from the real game), unofficial-fan-tool disclaimer footer.
+      Vitest suite (12 tests: engine invariants + a jsdom render smoke test), lint, and
+      production build all clean. Pushed to GitHub and deployed to GitHub Pages
+      (2026-08-07). Portfolio card updated to `status: 'built'` with real links, ordered
+      last in the project list (Rob's preference — most recent isn't necessarily first).
 
-  **Known gap: not visually QA'd in an actual browser** — this session had no browser
-  automation available, so it was verified via production build, typecheck, lint, and
-  a jsdom smoke-render of `<App />` (confirms it mounts, the board SVG renders with
-  tiles, "New board" doesn't throw) rather than by looking at it rendered. Worth an
-  actual look before treating the visual design (wood-grain texture, mobile bottom
-  sheet, PNG export output) as validated — flag any rough edges found and they can be
-  fixed as a quick follow-up, not a re-scope.
+  **Visual polish pass (2026-08-07, same day)**: Rob flagged the board as visually flat
+  and asked for a bigger/nicer look. Found and fixed a real bug in the process — the
+  ocean background's radial gradient was centered on a fixed 2000x2000-unit rect's own
+  bounding box while the visible viewBox is only ~20-25 units wide, so its falloff never
+  actually rendered (just a flat, off-center wash). Fixed to compute from actual board
+  bounds. Also added drop shadows on tiles/number chips/ports (raised, tactile look),
+  a soft ground shadow under the island, and scaled the board's max render size up
+  (920px → 1360px wide cap, 82svh → 90svh tall cap).
+
+  Rob reported still seeing no visible difference after that pass. Investigated by
+  building `scripts/render-screenshot.mjs` + `scripts/rasterize.mjs` — a way to
+  headlessly render the *actual* engine/theme code to a real PNG (not a mockup) without
+  needing a live browser, which this session never had access to. That surfaced the
+  real culprit: a `grain`/`water-ripple` texture layer (feTurbulence + CSS
+  `mix-blend-mode`) that broke the headless SVG rasterizer outright (rendered as a
+  washed-out rectangular artifact) and was never actually confirmed to render correctly
+  in a real browser either — it was added on faith during the original build, with no
+  visual verification available at build time. Removed both from the live app. The
+  resulting real screenshot (now in `catan-generator/docs/screenshot.png` and embedded
+  in that repo's README) looks clean: good color depth, legible icons, working drop
+  shadows, readable number chips and ports.
+
+  **Still open**: asked Rob to check the live site and confirm the blend-mode removal
+  actually fixed what he was seeing (as opposed to a caching issue or something else
+  entirely) — he hadn't sent a screenshot back as of this handoff. If a new session
+  picks this up, that confirmation is the next thing to chase before considering the
+  visual pass done. Also did a broader README overhaul in the same session: badges,
+  live demo link, a written explanation of the generation algorithm, and an MIT
+  `LICENSE` file (source code only, CATAN trademark disclaimer folded in) — see that
+  repo's `README.md` directly rather than duplicating it here.
 
 ## Not done yet — in priority order
 
@@ -199,7 +224,7 @@ a differentiator, disclaimer-based branding as standard practice). Also surfaced
 **not** adopted for v1: resource-probability heatmap overlays and "best starting spot"
 analytics (common in existing tools but read as v2 scope creep, not core).
 
-
+### Healthcare RAG — scoped plan (from 2026-08-07 grill-me session)
 
 **Goal**: demonstrate real RAG engineering (not a toy chatbot) to a hiring manager —
 retrieval that's visibly correct, an honest accounting of where pure-RAG falls short,
