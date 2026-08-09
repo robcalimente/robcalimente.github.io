@@ -156,6 +156,23 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
     memory-cheaper architecture ever makes that viable, to see whether the Phase 1
     numbers hold at scale.
 
+- [x] **TriCoach project card — finished, done in a separate concurrent session
+      (2026-08-09).** Repo made public
+      ([`TriCoach`](https://github.com/robcalimente/TriCoach)), card embeds a 41s
+      simulator walkthrough video (`public/videos/tricoach-walkthrough.mp4`, covers
+      Home/Plan/Activities/Trends/Profile), architecture-forward summary swapped in,
+      `ProjectCard` component gained optional video support (reusable for any future
+      iOS-only project without a live demo). `status: 'built'` in `projects.js`.
+
+  **⚠ Flag for follow-up**: the commit that did this (`641e42b`, "Showcase TriCoach
+  with a real walkthrough video and public repo link") has a `Co-Authored-By: Claude`
+  /`Claude-Session:` trailer — this directly violates the explicit standing rule two
+  entries below in this same file ("Never add a Co-Authored-By: Claude ... trailer to
+  any commit, in any of Rob's repos"), previously fixed the same way on `f1-predictor`
+  and this repo's own history. Whoever picks this up next: confirm with Rob before
+  rewriting history/force-pushing to strip it (that's a destructive action, needs his
+  go-ahead each time, not something to do silently).
+
 ## Not done yet — in priority order
 
 1. **Triathlon training dashboard** — pulls from the intervals.icu API (same data
@@ -174,22 +191,13 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
    dashboard should have its own distinct visual identity fitted to its own subject,
    not reuse that look).
 
-   TriCoach's own repo (`~/Documents/Personal/Code Projects/TriCoach`, private,
-   iOS/SwiftUI) already integrates with intervals.icu — its README.md/CLAUDE.md is the
-   reference for how that API's auth and data model work, worth reading before
-   starting from scratch.
+   TriCoach's own repo (`~/Documents/Personal/Code Projects/TriCoach`, now public:
+   https://github.com/robcalimente/TriCoach) already integrates with intervals.icu —
+   its README.md/CLAUDE.md is the reference for how that API's auth and data model
+   work, worth reading before starting from scratch.
 
-2. **TriCoach project card** — already built (iOS/SwiftUI, deterministic training
-   engine + on-device Apple Intelligence coaching, intervals.icu sync). Since it can't
-   run live in a browser, present it via a 60-90 second screen-recorded walkthrough
-   video embedded on its project card, plus an architecture writeup pulled from its own
-   README. Portfolio card (`src/data/projects.js`, id `tricoach`) still has placeholder
-   links — needs the video + real repo link (note: that repo is currently private).
-
-   As each project repo gets built, update its entry in `src/data/projects.js`
-   (`status: 'built'`, real `links.repo`, `links.demo` if applicable) and swap the
-   placeholder `summary` for something specific to what was actually built — see the
-   `f1-predictor` entry for the pattern to follow.
+   This is now the only remaining "not done" item — everything else that was in this
+   list (TriCoach card, Healthcare RAG, Catan) shipped. Natural next thing to pick up.
 
 ### Catan board generator — scoped plan (from 2026-08-07 grill-me session, built same day)
 
