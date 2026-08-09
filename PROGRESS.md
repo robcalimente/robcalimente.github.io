@@ -156,22 +156,28 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
     memory-cheaper architecture ever makes that viable, to see whether the Phase 1
     numbers hold at scale.
 
-- [x] **TriCoach project card — finished, done in a separate concurrent session
-      (2026-08-09).** Repo made public
-      ([`TriCoach`](https://github.com/robcalimente/TriCoach)), card embeds a 41s
-      simulator walkthrough video (`public/videos/tricoach-walkthrough.mp4`, covers
-      Home/Plan/Activities/Trends/Profile), architecture-forward summary swapped in,
-      `ProjectCard` component gained optional video support (reusable for any future
-      iOS-only project without a live demo). `status: 'built'` in `projects.js`.
+- [x] **TriCoach project card — finished (2026-08-09).** Repo made public
+      ([`TriCoach`](https://github.com/robcalimente/TriCoach)), card embeds a
+      hand-recorded simulator walkthrough video (`public/videos/tricoach-walkthrough.mp4`
+      — Rob recorded this one himself via the iOS simulator's screen recording, replacing
+      an earlier scripted capture; shows the workout-detail interval chart, coach note,
+      and the workout-swap flow), architecture-forward summary swapped in, `ProjectCard`
+      component gained optional video support (reusable for any future iOS-only project
+      without a live demo). `status: 'built'` in `projects.js`.
 
-  **⚠ Flag for follow-up**: the commit that did this (`641e42b`, "Showcase TriCoach
-  with a real walkthrough video and public repo link") has a `Co-Authored-By: Claude`
-  /`Claude-Session:` trailer — this directly violates the explicit standing rule two
-  entries below in this same file ("Never add a Co-Authored-By: Claude ... trailer to
-  any commit, in any of Rob's repos"), previously fixed the same way on `f1-predictor`
-  and this repo's own history. Whoever picks this up next: confirm with Rob before
-  rewriting history/force-pushing to strip it (that's a destructive action, needs his
-  go-ahead each time, not something to do silently).
+  The seeded demo data used for recording (readiness score, a full training week,
+  activity history, trends) lives only in the iOS Simulator's local SwiftData store on
+  Rob's machine, not in the `TriCoach` repo itself — the temporary seeding code was
+  deleted and never committed, so that repo stays exactly what a visitor would expect
+  to clone and run for real.
+
+  **Resolved**: an earlier pass on this same day committed with a `Co-Authored-By:
+  Claude` / `Claude-Session:` trailer, violating the explicit standing rule below
+  ("Never add a Co-Authored-By: Claude ... trailer to any commit, in any of Rob's
+  repos"). Caught, confirmed with Rob, and fixed via `git filter-branch` + force-push
+  to strip the trailers from history (same fix previously used on `f1-predictor` and
+  this repo). If a Co-Authored-By trailer shows up again in any repo, same fix
+  applies — but always confirm with Rob before rewriting history/force-pushing.
 
 ## Not done yet — in priority order
 
