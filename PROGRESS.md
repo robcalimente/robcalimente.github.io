@@ -103,12 +103,62 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
   `LICENSE` file (source code only, CATAN trademark disclaimer folded in) — see that
   repo's `README.md` directly rather than duplicating it here.
 
+- [x] **Healthcare RAG — built and live.** Separate repo
+      [`healthcare-rag`](https://github.com/robcalimente/healthcare-rag), demo at
+      https://robcalimente.github.io/healthcare-rag/ (frontend, GitHub Pages) with a
+      FastAPI backend at https://healthcare-rag-backend.onrender.com (Render free
+      tier). Built and deployed 2026-08-07 to 2026-08-09 in the same session that
+      scoped it. Portfolio card updated to `status: 'built'` with real links.
+
+  **What it is**: RAG over 100 synthetic Synthea patients (conditions, medications,
+  encounters, labs, clinical notes — last 5 years per patient). Two chat modes:
+  patient-scoped (vector RAG filtered by patient ID) and population-level, where a
+  deterministic rule-based router sends counting/percentage questions to a real SQL
+  query instead of vector search (vector search reliably undercounts) and sends
+  everything else to vector RAG. Every answer ships with a live retrieval trace
+  (matched chunks, similarity scores, which router path handled it) and a persistent
+  "synthetic data, not for clinical use" disclaimer. A 40-question eval with
+  mechanically-derived ground truth is published on the site's own Methodology page:
+  population-mode counting is 100% accurate, patient-mode list questions are a
+  documented 30% under strict all-or-nothing grading — a real, understood
+  retrieval-depth limitation (patients with more records than fit in one retrieval
+  call get incomplete lists back), written up honestly rather than hidden.
+
+  **Free-tier stack**: Groq (LLM, free tier), fastembed/ONNX Runtime (embeddings,
+  not sentence-transformers/PyTorch — see below for why), a plain in-memory numpy
+  vector matrix (no ANN index needed at this scale) with chunk text in SQLite, React
+  frontend on GitHub Pages, FastAPI backend on Render free tier. $0 recurring cost.
+
+  **Deploy debugging, worth remembering for future free-tier-hosted projects**: the
+  first Render deploy crashed on `HF_HUB_OFFLINE` forcing an embedding-model lookup
+  that only worked on a machine with a local cache (fixed: don't force offline mode,
+  let it download once at boot). The second and third deploys OOM'd on Render's
+  512MB limit — traced to PyTorch's own baseline memory footprint (not corpus size:
+  it still OOM'd after cutting the corpus to a few MB), which is what actually forced
+  the embedding-model swap from `sentence-transformers` to `fastembed` (ONNX Runtime,
+  no PyTorch). That swap then needed its own fixes: unbounded clinical-note text
+  length was quadratically blowing up attention cost, and fastembed's default
+  multiprocessing was spawning redundant full model copies per batch (`parallel=1`
+  fixed it). Also downsampled from the originally-planned 1000 patients to 100 as a
+  safety margin against the 512MB ceiling once the other fixes were in — a hosting-
+  budget decision, not a design limitation, documented on the Methodology page itself
+  rather than just in this file.
+
+  **Phase 2 (stretch — explicitly deferred, not lost, not yet started)**:
+  - Improve patient-mode retrieval completeness (the 30% number) — likely needs
+    per-record-type retrieval instead of one flat top-k call, since that's the
+    documented root cause, not a prompting issue.
+  - Expand the eval set beyond the initial 40 questions.
+  - Broaden population-mode question coverage (phrasings the rule-based router
+    doesn't yet catch).
+  - LLM-based routing as a documented v2 replacement for the rule-based router.
+  - Re-run the eval at the full 1000-patient scale if a paid tier or a
+    memory-cheaper architecture ever makes that viable, to see whether the Phase 1
+    numbers hold at scale.
+
 ## Not done yet — in priority order
 
-1. **Healthcare RAG** — fully scoped via a `/grill-me` session — see below for the
-   agreed plan. Not started (build has not begun).
-
-2. **Triathlon training dashboard** — pulls from the intervals.icu API (same data
+1. **Triathlon training dashboard** — pulls from the intervals.icu API (same data
    source as TriCoach, see below) to visualize workout history, pace/power trends over
    time, and CTL/ATL/TSB training load in the browser. React, new separate repo
    (sibling to `f1-predictor` and `TriCoach` under
@@ -129,7 +179,7 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
    reference for how that API's auth and data model work, worth reading before
    starting from scratch.
 
-3. **TriCoach project card** — already built (iOS/SwiftUI, deterministic training
+2. **TriCoach project card** — already built (iOS/SwiftUI, deterministic training
    engine + on-device Apple Intelligence coaching, intervals.icu sync). Since it can't
    run live in a browser, present it via a 60-90 second screen-recorded walkthrough
    video embedded on its project card, plus an architecture writeup pulled from its own
@@ -223,81 +273,6 @@ folded into the plan above (pip-intersection cap, shareable permalinks, mobile-f
 a differentiator, disclaimer-based branding as standard practice). Also surfaced but
 **not** adopted for v1: resource-probability heatmap overlays and "best starting spot"
 analytics (common in existing tools but read as v2 scope creep, not core).
-
-### Healthcare RAG — scoped plan (from 2026-08-07 grill-me session)
-
-**Goal**: demonstrate real RAG engineering (not a toy chatbot) to a hiring manager —
-retrieval that's visibly correct, an honest accounting of where pure-RAG falls short,
-and a documented eval, all running for free indefinitely.
-
-**Data**: ~1000 synthetic patients generated via **Synthea**, including conditions,
-medications, encounters, lab observations, and clinical notes (SOAP-style). Synthetic
-only, deliberately avoids HIPAA/real-PHI risk.
-
-**Two demo modes**:
-- **Patient-scoped chat** — pick a synthetic patient, ask questions answered via RAG
-  scoped to that patient's records (metadata-filtered retrieval by patient ID).
-- **Population-level chat** — ask questions across the full synthetic cohort.
-
-**Hybrid retrieval architecture** (this is the core "engineering story" of the
-project):
-- Vector RAG (Chroma or FAISS, pre-built index, bundled with backend) handles
-  descriptive/pattern questions in both modes.
-- A **rule-based router** (keyword/pattern matching — e.g. "how many", "what
-  percentage", "count of" → structured path) detects counting/aggregate questions in
-  population mode and routes them to a **real structured/SQL query** over the
-  underlying Synthea tables instead of vector search, since similarity search
-  systematically undercounts on exact-count questions. Router logic is deterministic
-  and shown in the UI (not an LLM call) — keeps it cheap and fully explainable.
-  LLM-based routing is a documented v2 idea, not built in v1.
-
-**Free-tier stack** (target: $0 recurring cost):
-- LLM inference: Groq free API tier (fast enough to keep demo latency low).
-- Embeddings: local open-source model (`sentence-transformers/all-MiniLM-L6-v2`),
-  no per-call embedding cost.
-- Vector store: Chroma/FAISS, in-process, pre-indexed at build time (like
-  `f1-predictor`'s offline model training), not computed per-request.
-- Backend hosting: Render or Fly.io free tier. Known tradeoff: free tier sleeps after
-  inactivity, ~10-30s cold start on first request — frontend must show an explicit
-  "waking up the demo" state rather than a silent hang, so the delay reads as
-  intentional.
-- Frontend: React, deployed to its own GitHub Pages repo, same pattern as
-  `f1-predictor` (site links out, doesn't embed the code).
-
-**Trust/transparency UI** (this is what makes the eval credible, not just a claimed
-number):
-- A live **retrieval trace panel** shown alongside every chat answer: which patient(s)
-  were matched, top-k retrieved chunks (record type, date, snippet, similarity score),
-  which chunks the answer actually cites, and which router path (vector vs structured)
-  handled the question.
-- A persistent, visible **disclaimer**: "Synthetic data only (Synthea-generated). Not
-  real patients. Not for clinical use." Not buried in a README — shown in the UI
-  itself.
-
-**Eval methodology**: hand-crafted set of ~30-50 Q&A pairs (mix of patient-scoped and
-population-scoped) where the correct answer is mechanically derivable from the
-underlying Synthea data. Score retrieval quality (did it fetch the right source
-records — measurable exactly against known ground truth) and answer correctness
-(graded manually, not LLM-as-judge, since the set is small enough and manual grading
-is more trustworthy to publish as a real number). Results published on a dedicated
-methodology/eval page on the project's own dashboard — not just a README.
-
-**Phasing**:
-- **Phase 1 (MVP — this is what "done" means for first ship)**: full 1000-patient
-  dataset with notes, both chat modes working, hybrid router with structured counting,
-  retrieval trace panel, disclaimer, and the methodology/eval page with published
-  results from the 30-50 question eval set. This is a complete, demoable project on
-  its own.
-- **Phase 2 (stretch — do not lose track of this, not yet built)**:
-  - Improve retrieval quality based on what the Phase 1 eval reveals as weak.
-  - Expand the eval set beyond the initial 30-50 questions.
-  - Broaden population-mode question coverage (phrasings the rule-based router
-    doesn't yet catch).
-  - LLM-based routing as a documented v2 replacement for the rule-based router.
-
-Visual identity, exact repo name, and UI layout details are not yet decided — to be
-figured out at build time, following the existing rule that each project gets its own
-distinct visual identity rather than reusing another project's design system.
 
 ## Preferences to respect going forward
 

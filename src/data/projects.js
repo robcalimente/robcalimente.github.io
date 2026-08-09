@@ -22,12 +22,12 @@ export const projects = [
   {
     id: 'healthcare-rag',
     title: 'Healthcare RAG',
-    tagline: 'Retrieval-augmented AI over synthetic patient records',
+    tagline: 'Retrieval-augmented chat over 100 synthetic patient charts, with a live retrieval trace',
     tags: ['AI', 'RAG', 'LLMs'],
-    status: 'planned',
+    status: 'built',
     summary:
-      'Explores how RAG can surface relevant context from patient histories: medications, encounters, visits. Uses Synthea-generated synthetic EHR data to stay compliance-safe while modeling a real healthcare use case.',
-    links: { repo: '', demo: '' },
+      'Patient-scoped and population-level chat over Synthea-generated synthetic EHR data. A deterministic router sends counting questions ("how many patients have X") to a real SQL query instead of vector search, since similarity search reliably undercounts, while descriptive questions go through vector RAG. Every answer ships with a retrieval trace showing exactly what was matched and why. A 40-question eval with mechanically-derived ground truth is published on the site: population-mode counting is 100% accurate, patient-mode list questions are a documented, honest 30% under strict grading, a real retrieval-depth limitation, not smoothed over.',
+    links: { repo: 'https://github.com/robcalimente/healthcare-rag', demo: 'https://robcalimente.github.io/healthcare-rag/' },
   },
   {
     id: 'tricoach',
