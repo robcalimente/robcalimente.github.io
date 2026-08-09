@@ -42,14 +42,14 @@
 .hero-eyebrow {
   font-family: var(--heading);
   color: var(--text-h);
-  letter-spacing: -0.5px;
-  font-size: 28px;
-  font-weight: 700;
+  letter-spacing: -0.8px;
+  font-size: 36px;
+  font-weight: 800;
 }
 
 @media (max-width: 768px) {
   .hero-eyebrow {
-    font-size: 22px;
+    font-size: 26px;
   }
 }
 
@@ -70,6 +70,34 @@
   max-width: 560px;
   font-size: 18px;
   color: var(--text);
+}
+
+.hero-domains {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-domain-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px 6px 10px;
+  background: var(--bg-raised);
+}
+
+.hero-domain-index {
+  color: var(--accent);
+  font-size: 11px;
 }
 
 .hero-cta {
