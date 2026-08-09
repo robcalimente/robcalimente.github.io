@@ -94,6 +94,15 @@
   overflow: hidden;
 }
 
+.project-video {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
 .project-detail p {
   color: var(--text);
   line-height: 1.6;

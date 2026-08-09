@@ -36,8 +36,9 @@ export const projects = [
     tags: ['Swift', 'SwiftUI', 'iOS', 'On-device AI'],
     status: 'built',
     summary:
-      'Builds and adapts swim/bike/run training plans against intervals.icu data, with workout-specific fueling guidance and on-device Apple Intelligence coaching notes layered on top of a fully auditable, rule-based training engine (CTL/ATL/TSB load tracking, periodization, template selection).',
-    links: { repo: '', demo: '' },
+      'Builds and adapts swim/bike/run training plans against intervals.icu data, with workout-specific fueling guidance and on-device Apple Intelligence coaching notes layered on top of a fully auditable, rule-based training engine. The split is deliberate: CTL/ATL/TSB load tracking, race-distance-aware periodization, and template selection are 100% deterministic Swift, and Apple\'s on-device Foundation Models framework is used only to rephrase those already-correct decisions into a natural coach voice, never to make them — every screen still works, just with plainer text, if Apple Intelligence isn\'t available. No backend; intervals.icu is the synced source of truth for zones and history, with planned workouts pushed back to your training calendar.',
+    links: { repo: 'https://github.com/robcalimente/TriCoach', demo: '' },
+    video: '/videos/tricoach-walkthrough.mp4',
   },
   {
     id: 'catan-generator',

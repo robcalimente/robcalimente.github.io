@@ -40,6 +40,15 @@ function ProjectCard({ project, isOpen, onToggle }) {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
+            {project.video && (
+              <video
+                className="project-video"
+                src={project.video}
+                controls
+                playsInline
+                preload="metadata"
+              />
+            )}
             <p>{project.summary}</p>
             <div className="project-links">
               {project.links.repo ? (
