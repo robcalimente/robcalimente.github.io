@@ -17,8 +17,15 @@ deployed to GitHub Pages.
 Two full-screen scroll-snap pages (Apple-style, not a continuous scroll):
 
 - **Page 1 (`Hero.jsx`, `#hero`)** — particle constellation canvas background
-  (`ParticleField.jsx`, vanilla canvas, no dependency), name, headline, one-paragraph
-  bio, and two CTA buttons ("See the work" → `#projects`, "Get in touch" → `#contact`).
+  (`ParticleField.jsx`, vanilla canvas, no dependency) that also animates cars, a
+  cyclist, a runner, and a swimmer racing through the particle field (motorsport +
+  triathlon personality touches, see Done below), name, headline, one-paragraph bio,
+  a row of domain HUD chips (DATA/AI/MOBILE/WEB), and two CTA buttons ("See the work"
+  → `#projects`, "Get in touch" → `#contact`). Also mounts two site-wide (not
+  hero-scoped) components from `App.jsx`: `StartLights.jsx` (F1-style five-light
+  intro overlay, plays once per browser session via `sessionStorage`) and
+  `LapLine.jsx` (checkered-flag-textured scroll progress bar pinned to the top,
+  tracks the `#root` scroll container).
 - **Page 2 (`page-two` wrapper in `App.jsx`)** — `Projects.jsx` (expandable project
   cards) and `Contact.jsx` ("Let's talk" — email, resume link, GitHub/LinkedIn) stacked
   in the same internally-scrollable page.
@@ -178,6 +185,78 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
   to strip the trailers from history (same fix previously used on `f1-predictor` and
   this repo). If a Co-Authored-By trailer shows up again in any repo, same fix
   applies — but always confirm with Rob before rewriting history/force-pushing.
+
+- [x] **Hero rework + motorsport/triathlon personality touches (2026-08-09).**
+      Committed as `c57b8e1`, pushed to `main`, and deployed live via `npm run
+      deploy`.
+
+  **Copy/hierarchy**: headline changed from a generic "I build full-stack,
+  AI-powered, and mobile-native software" to "I turn data into decisions, then
+  build the AI and apps to act on them," with subtext explicitly framing data
+  science/analytics as Rob's background and AI/full-stack/mobile as what he builds
+  for fun — Rob's real professional background is data science/analytics, and the
+  original copy buried that. Name (`hero-eyebrow`) bumped to 36px/800-weight so it
+  reads clearly bold next to the headline. An earlier attempt to make the name the
+  literal biggest element (swapping it into the `<h1>` slot) was tried and
+  explicitly rejected by Rob ("not loving it") — don't reintroduce that swap without
+  checking first.
+
+  **Domain HUD chips** (`hero-domains` in `Hero.jsx`/`Hero.css`): a monospace
+  telemetry-style row reading `01 DATA · 02 AI · 03 MOBILE · 04 WEB` under the
+  subtext. Well-received, kept as-is.
+
+  **Rejected/removed**: a pulsing "currently building, currently training" status
+  dot next to the name (`hero-status`/`hero-pulse`) was built, then explicitly
+  cut per Rob's feedback — don't re-add without Rob asking for it again.
+
+  **`StartLights.jsx`**: five-light F1-style intro sequence (lights fill in, then
+  all go dark together — "lights out, away we go" — before the hero content
+  animates in). Gated by `sessionStorage.getItem('intro-shown')`, so it only plays
+  once per browser session; to see it again in dev, run
+  `sessionStorage.clear()` in the console and reload, or open a private window.
+
+  **`LapLine.jsx`**: thin scroll-progress bar fixed to the top of the page, styled
+  with a repeating checkered-flag-pattern track and an accent-colored fill tied to
+  `useScroll({ container })` against `document.getElementById('root')` (the actual
+  scrollable element, since this site uses `overflow-y: auto` + scroll-snap on
+  `#root`, not window scroll).
+
+  **`ParticleField.jsx` racers** — the same canvas particle system used for the
+  background constellation now also spawns four kinds of moving figures
+  (`KIND_CONFIG` object controls speed/scale/lane/spawn-cadence per kind), each
+  independently scheduled and all briefly linking into nearby constellation
+  particles as they pass:
+  - **Cars** (`drawCarSilhouette`): coupe silhouette (long hood, raked windshield,
+    short cabin, canopy glass, lip spoiler, wheels with rim highlights, white
+    headlight glow front / red taillight glow rear), one of four colors
+    (`CAR_COLORS`: red/blue/purple/green) picked per spawn, fastest and most
+    frequent (spawns every ~1.8–4.2s).
+  - **Cyclist** (`drawCyclist`): diamond-frame bike + leaning rider, single
+    accent-colored. Fixed a real bug here: the front wheel was originally wired to
+    the bottom bracket like a chain stay (as if pedals drove the front wheel),
+    which read as the bike moving backwards — front wheel now connects to the
+    handlebars via a fork instead. Spawns roughly every 9–16s.
+  - **Runner** (`drawRunner`): bent-elbow pumping arms, a driving leg (knee up,
+    foot striking forward-down) alternating with a high-tucked recovery leg via a
+    `legPose(w)` helper, forward torso lean, vertical bob. Was originally too
+    subtle ("looks like fast walking") — amplitudes and the bent-knee alternation
+    were added specifically to fix that. Spawns roughly every 18–30s.
+  - **Swimmer** (`drawSwimmer`): lowest lane (near the bottom edge, `laneMin:
+    0.86`), horizontal body line, big flutter kick, and a proper alternating
+    freestyle arm cycle via `armPose(w)` — one arm bends at the elbow and reaches
+    overhead (recovery/out of water), the other pulls back close to the body
+    (underwater pull), trailing a faint ripple. Also originally too subtle, fixed
+    the same way as the runner. Spawns roughly every 20–32s.
+
+  All four kinds respect `prefers-reduced-motion` (skipped entirely when it's set,
+  same as the base particle animation). Lint (`oxlint`) and `vite build` both clean.
+
+  **If a future session touches `ParticleField.jsx` again**: the `at(px, py)`
+  helper pattern (local figure-space coordinates transformed by
+  `cx + px * dir * scale`) is used consistently across all four draw functions —
+  keep new limbs/parts in that same local coordinate space rather than computing
+  absolute canvas coordinates by hand, it's what makes direction-flipping and
+  scaling work for free.
 
 ## Not done yet — in priority order
 
