@@ -1,15 +1,9 @@
 .hero {
   position: relative;
   text-align: center;
-  gap: 14px;
-  justify-content: flex-start;
-  padding-top: 16vh;
-}
-
-@media (max-width: 768px) {
-  .hero {
-    padding-top: 12vh;
-  }
+  gap: clamp(8px, 2vh, 14px);
+  justify-content: center;
+  padding-top: clamp(0px, 4vh, 32px);
 }
 
 .hero-glow {
@@ -43,39 +37,27 @@
   font-family: var(--heading);
   color: var(--text-h);
   letter-spacing: -0.8px;
-  font-size: 36px;
+  font-size: clamp(26px, 4vw, 36px);
   font-weight: 800;
 }
 
-@media (max-width: 768px) {
-  .hero-eyebrow {
-    font-size: 26px;
-  }
-}
-
 .hero h1 {
-  font-size: 56px;
+  font-size: clamp(34px, 6.5vw, 56px);
   line-height: 1.1;
   letter-spacing: -1.5px;
   max-width: 820px;
 }
 
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 34px;
-  }
-}
-
 .hero-sub {
   max-width: 560px;
-  font-size: 18px;
+  font-size: clamp(15px, 2.2vh, 18px);
   color: var(--text);
 }
 
 .hero-domains {
   display: flex;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: clamp(2px, 1vh, 4px);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -103,7 +85,31 @@
 .hero-cta {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: clamp(6px, 1.5vh, 12px);
+}
+
+@media (max-height: 700px) {
+  .hero-eyebrow {
+    font-size: clamp(22px, 3.4vw, 30px);
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5.5vw, 44px);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+  }
+
+  .button {
+    padding: 10px 18px;
+  }
+}
+
+@media (max-height: 480px) {
+  .hero-domains {
+    display: none;
+  }
 }
 
 .button {
