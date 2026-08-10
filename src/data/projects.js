@@ -10,16 +10,6 @@ export const projects = [
     links: { repo: 'https://github.com/robcalimente/f1-predictor', demo: 'https://robcalimente.github.io/f1-predictor/' },
   },
   {
-    id: 'tri-dashboard',
-    title: 'Triathlon Training Dashboard',
-    tagline: 'A web view into real training load and pace trends, powered by the same data as TriCoach',
-    tags: ['React', 'Data Viz', 'API'],
-    status: 'planned',
-    summary:
-      'Pulls from the intervals.icu API to visualize workout history, pace/power trends over time, and CTL/ATL/TSB training load. A browser-based companion to the TriCoach iOS app.',
-    links: { repo: '', demo: '' },
-  },
-  {
     id: 'healthcare-rag',
     title: 'Healthcare RAG',
     tagline: 'Retrieval-augmented chat over 100 synthetic patient charts, with a live retrieval trace',
@@ -41,14 +31,14 @@ export const projects = [
     video: '/videos/tricoach-walkthrough.mp4',
   },
   {
-    id: 'wheel-of-food',
-    title: 'Wheel of Food',
-    tagline: 'Decision fatigue, solved with a Vegas-style spinning wheel and zero regrets',
-    tags: ['JavaScript', 'Canvas', 'Web Audio'],
-    status: 'built',
+    id: 'tri-dashboard',
+    title: 'Triathlon Training Dashboard',
+    tagline: 'A web view into real training load and pace trends, powered by the same data as TriCoach',
+    tags: ['React', 'Data Viz', 'API'],
+    status: 'planned',
     summary:
-      "You ever get hungry but can't decide what to eat? Yeah, me too, more times than I'd like to admit. So instead of doom-scrolling Yelp for forty minutes, I built a Vegas-style spinning wheel to do the deciding for me. Load it with your go-to restaurants, spin it, and whatever it lands on is dinner, no take-backs. Winner Pick mode for a straight answer, Elimination mode if you want the drama of watching options get voted off one by one. Multiple named wheels in tabs (Pizza, BBQ, \"Places That Are Still Open\"), idle casino music, tick sounds, a win fanfare, and confetti, because a decision this important deserves a soundtrack. Also exists as a native SwiftUI/iOS port for when you need to outsource dinner decisions on the go.",
-    links: { repo: 'https://github.com/robcalimente/wheel-of-food', demo: 'https://robcalimente.github.io/wheel-of-food/' },
+      'Pulls from the intervals.icu API to visualize workout history, pace/power trends over time, and CTL/ATL/TSB training load. A browser-based companion to the TriCoach iOS app.',
+    links: { repo: '', demo: '' },
   },
   {
     id: 'catan-generator',
@@ -59,5 +49,15 @@ export const projects = [
     summary:
       'Generates full base-game (19-tile) and 5-6 Player Extension (30-tile) boards with configurable fairness rules solved via constraint-satisfaction backtracking, not blind shuffle-and-reject: no matching resources adjacent, no 6/8s adjacent or duplicated per resource, and an optional pip-intersection cap. Every board is a reproducible permalink. Original illustrated SVG art, no assets traced from the real game.',
     links: { repo: 'https://github.com/robcalimente/catan-generator', demo: 'https://robcalimente.github.io/catan-generator/' },
+  },
+  {
+    id: 'wheel-of-food',
+    title: 'Wheel of Food',
+    tagline: 'Decision fatigue, solved with a Vegas-style spinning wheel and zero regrets',
+    tags: ['JavaScript', 'Canvas', 'Web Audio'],
+    status: 'built',
+    summary:
+      "You ever get hungry but can't decide what to eat? Yeah, me too, more times than I'd like to admit. So instead of doom-scrolling Yelp for forty minutes, I built a Vegas-style spinning wheel to do the deciding for me. Load it with your go-to restaurants, spin it, and whatever it lands on is dinner, no take-backs. Winner Pick mode for a straight answer, Elimination mode if you want the drama of watching options get voted off one by one. Multiple named wheels in tabs (Pizza, BBQ, \"Places That Are Still Open\"), idle casino music, tick sounds, a win fanfare, and confetti, because a decision this important deserves a soundtrack. Also exists as a native SwiftUI/iOS port for when you need to outsource dinner decisions on the go.",
+    links: { repo: 'https://github.com/robcalimente/wheel-of-food', demo: 'https://robcalimente.github.io/wheel-of-food/' },
   },
 ]
