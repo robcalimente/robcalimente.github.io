@@ -41,6 +41,16 @@ export const projects = [
     video: '/videos/tricoach-walkthrough.mp4',
   },
   {
+    id: 'wheel-of-food',
+    title: 'Wheel of Food',
+    tagline: 'Decision fatigue, solved with a Vegas-style spinning wheel and zero regrets',
+    tags: ['JavaScript', 'Canvas', 'Web Audio'],
+    status: 'built',
+    summary:
+      "You ever get hungry but can't decide what to eat? Yeah, me too, more times than I'd like to admit. So instead of doom-scrolling Yelp for forty minutes, I built a Vegas-style spinning wheel to do the deciding for me. Load it with your go-to restaurants, spin it, and whatever it lands on is dinner, no take-backs. Winner Pick mode for a straight answer, Elimination mode if you want the drama of watching options get voted off one by one. Multiple named wheels in tabs (Pizza, BBQ, \"Places That Are Still Open\"), idle casino music, tick sounds, a win fanfare, and confetti, because a decision this important deserves a soundtrack. Also exists as a native SwiftUI/iOS port for when you need to outsource dinner decisions on the go.",
+    links: { repo: 'https://github.com/robcalimente/wheel-of-food', demo: 'https://robcalimente.github.io/wheel-of-food/' },
+  },
+  {
     id: 'catan-generator',
     title: 'Catan Board Generator',
     tagline: 'A fair-by-default random board generator for base and 5-6 player Catan',
