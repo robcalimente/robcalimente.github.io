@@ -258,6 +258,35 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
   absolute canvas coordinates by hand, it's what makes direction-flipping and
   scaling work for free.
 
+- [x] **Wheel of Food — built and live (2026-08-09/2026-08-10).** New repo
+      [`wheel-of-food`](https://github.com/robcalimente/wheel-of-food), demo at
+      https://robcalimente.github.io/wheel-of-food/. Source was an existing single-file
+      HTML app (Canvas-rendered spinning wheel, Web Audio lookahead-scheduled idle
+      music/tick sounds/fanfare, confetti, localStorage-persisted wheels + spin
+      history) that already lived at `~/Documents/Personal/Code Projects/wheel of
+      food/index.html` — copied as-is into the new repo plus a new `README.md`, no
+      code changes. A native SwiftUI/iOS port of the same app also exists at
+      `~/Documents/Personal/Code Projects/wheel of food/WheelOfFoodApp/` (Xcode
+      project) but its source isn't published — the portfolio card and repo `README`
+      both mention it exists without linking to it, same "video/mention-only" pattern
+      as TriCoach's approach to iOS-only work.
+
+  **Deploy mechanics differ from other project repos**: this repo has no build step
+  (plain HTML/CSS/JS, no `package.json`), so Pages was enabled directly via
+  `gh api repos/robcalimente/wheel-of-food/pages` pointing at the `main` branch root
+  (`path: /`) rather than the `gh-pages`-package-to-a-`gh-pages`-branch flow every
+  other project repo uses. If this repo ever gains a build step, switch it to match
+  the others for consistency.
+
+  Portfolio card inserted into `projects.js` right before `catan-generator`, so
+  ordering stays `tricoach → wheel-of-food → catan-generator` (catan-generator stays
+  last per Rob's existing preference, noted above). **Copy tone note**: Rob explicitly
+  asked for the summary to be funny/sarcastic here, breaking from the more
+  technical/dry tone of the other cards' summaries — dictated the gist himself
+  ("you ever get hungry but can't decide..."), final copy was written up from that.
+  Treat this card's voice as a deliberate one-off, not a signal to make other cards
+  funnier too, unless Rob asks for that explicitly.
+
 ## Not done yet — in priority order
 
 1. **Triathlon training dashboard** — pulls from the intervals.icu API (same data
