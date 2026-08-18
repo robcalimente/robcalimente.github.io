@@ -289,26 +289,11 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
 
 ## Not done yet — in priority order
 
-1. **Triathlon training dashboard** — pulls from the intervals.icu API (same data
-   source as TriCoach, see below) to visualize workout history, pace/power trends over
-   time, and CTL/ATL/TSB training load in the browser. React, new separate repo
-   (sibling to `f1-predictor` and `TriCoach` under
-   `~/Documents/Personal/Code Projects/`), deployed the same way as `f1-predictor`
-   (own GitHub repo + GitHub Pages, portfolio site links out to it rather than
-   containing its code).
-
-   Not yet scoped in detail — that's the first step: figure out what intervals.icu API
-   access looks like (auth, rate limits, what data is actually available), decide what
-   the dashboard should visualize beyond the three things already named (workout
-   history, pace/power trends, CTL/ATL/TSB), and decide on visual identity (the
-   `f1-predictor` dashboard has a "live timing tower" aesthetic — the triathlon
-   dashboard should have its own distinct visual identity fitted to its own subject,
-   not reuse that look).
-
-   TriCoach's own repo (`~/Documents/Personal/Code Projects/TriCoach`, now public:
-   https://github.com/robcalimente/TriCoach) already integrates with intervals.icu —
-   its README.md/CLAUDE.md is the reference for how that API's auth and data model
-   work, worth reading before starting from scratch.
+1. **`tri-dashboard`** — triathlon training dashboard + predictive finish-time model,
+   built on **synthetic data** (not a live intervals.icu pull — that plan was
+   superseded on 2026-08-09, see scoped plan below for why). Fully scoped via a
+   grill-me session on 2026-08-09; see
+   "`tri-dashboard` — scoped plan" below for the full spec. Not yet built.
 
    This is now the only remaining "not done" item — everything else that was in this
    list (TriCoach card, Healthcare RAG, Catan) shipped. Natural next thing to pick up.
@@ -395,6 +380,100 @@ folded into the plan above (pip-intersection cap, shareable permalinks, mobile-f
 a differentiator, disclaimer-based branding as standard practice). Also surfaced but
 **not** adopted for v1: resource-probability heatmap overlays and "best starting spot"
 analytics (common in existing tools but read as v2 scope creep, not core).
+
+### `tri-dashboard` — scoped plan (from 2026-08-09 grill-me session, not yet built)
+
+**Goal**: a triathlon training dashboard (workout history, HR/pace trends, CTL/ATL/TSB)
+paired with a predictive finish-time model — a portfolio companion to `TriCoach`,
+showing the same kind of data the iOS app works with, plus a from-scratch ML
+prediction feature the app itself doesn't have.
+
+**Repo**: new standalone repo `tri-dashboard` (sibling to `f1-predictor`, `TriCoach`,
+`catan-generator`), React + Vite frontend, deployed to its own GitHub Pages via the
+same `gh-pages` package flow as the other projects. Portfolio site links out to it,
+doesn't contain its code. One-time build (generate data → train model → bake into
+static site → deploy) — no CI automation, no live data source to poll. Fixed random
+seed in the data generator for full reproducibility.
+
+**Why synthetic data, not live intervals.icu (supersedes the earlier plan above)**:
+a live pull means either exposing Rob's personal training data to every site visitor,
+or building an auth flow for visitors to connect their own account — too much
+complexity/privacy tradeoff for a portfolio piece. `TriCoach` (the iOS app) keeps the
+real, live intervals.icu integration; this dashboard is a synthetic-data sibling.
+Synthetic also means the "ground truth" is known, so the model's accuracy can be
+reported honestly against it (see Validation below) — something no real-data tool can
+do.
+
+**Synthetic data generation** (Python, seeded/reproducible):
+- ~2,000-3,000 synthetic athletes split across 4 race distances (sprint / Olympic /
+  70.3 / full IM).
+- Each athlete has underlying "true" fitness parameters — aerobic capacity, per-
+  discipline relative strength (triathletes are rarely balanced across swim/bike/run),
+  training adherence/consistency, age/sex-driven HR zone offsets — that generate both
+  their training data and their race result. This is a real signal-through-noise
+  relationship, not cosmetic random numbers, which is what makes the predictive model
+  meaningful rather than a fake progress bar.
+- Training plan structure (weekly volume by phase, taper length, brick session
+  frequency) is **sourced from TriCoach's own real parameters**
+  (`Sources/TriCoach/Models/Enums.swift`, `Engine/PlanGenerator.swift` — e.g. sprint
+  ~40/90/55 min swim/bike/run, Olympic ~60/130/90 min, 15-30 day tapers by distance),
+  reimplemented as a simplified Python model — not a full port of the Swift engine, just
+  the same numbers, for cross-project coherence.
+- Each workout has a lightweight within-workout time-series (~5-20 points: warmup/
+  main-set/cooldown structure, HR/pace drifting across them) rather than one flat
+  average per workout — supports real curves in the UI (see Visual identity) and lets
+  cardiac decoupling/HR drift show up as a legitimate metric.
+
+**Model**: single LightGBM model (matches the `f1-predictor` stack), **quantile
+regression** (10th/50th/90th percentile) rather than a single point estimate, with race
+distance as an input feature rather than training 4 separate models — this lets the
+model learn how fitness-feature importance shifts with distance (e.g. aerobic
+durability matters more as distance increases) and generalize/extrapolate across
+distances for a single athlete, which 4 independent models couldn't do (each would
+have zero examples resembling an athlete who trained for a different distance).
+Features are distance-agnostic fitness signals extracted from training data (threshold
+pace/power per discipline, aerobic durability/fade rate, HR efficiency, brick-run
+capability), not raw workout logs.
+
+**Validation**: 80/20 **athlete-level** train/test split (not workout-level, to avoid
+leakage), MAE per distance reported honestly on the site — including the fact that
+predictions for distances far from what an athlete actually trained for (e.g. a
+sprint-trained athlete's IM prediction) are extrapolations with wider confidence
+intervals, flagged as lower-confidence rather than presented with false precision.
+
+**Dashboard content — four exemplar athletes, one per distance, selectable via
+tab/toggle** (hand-picked from the synthetic population used to train the shared
+model, not a separate generation process). Each exemplar shows:
+- Their own real, completed training block (12-16+ weeks, matching their distance's
+  actual plan length) — workout history, HR/pace trends, CTL/ATL/TSB — so the four
+  exemplars visibly show different training *shapes* (sprint's short high-intensity
+  block vs. IM's long volume-heavy block with a 30-day taper), not just different
+  numbers.
+- A predictor panel showing predicted finish time **at all four distances** (with
+  confidence intervals), including the "what if they'd trained for X instead" cross-
+  distance predictions, plus their actual race result for the distance they really
+  trained for (predicted-vs-actual, proving the model's honesty).
+- **Live in-browser slider interactivity**: the trained model is exported to run
+  client-side (likely via `onnxruntime-web` or a hand-rolled JS tree-traversal export,
+  to be decided at implementation time), with a handful of key sliders (threshold pace,
+  weekly volume, aerobic durability) feeding the already-trained model directly so a
+  visitor can drag a slider and watch predictions update live — no backend needed on
+  static GitHub Pages. Feature extraction (raw workouts → fitness features) stays
+  precomputed per exemplar; only the trained-model inference step is live.
+
+**Visual identity — elevation-profile/topographic aesthetic, explicitly not a reskin
+of `f1-predictor`** (Rob was emphatic on this point): contour-line motifs, gradient
+washes evoking terrain, discipline-specific color language (swim/bike/run get distinct
+colors rather than F1's single racing-red/carbon palette), charts styled like elevation
+profiles rather than F1's bar-tachometer/timing-tower HUD look, calmer/more spacious
+layout reflecting endurance pacing rather than split-second telemetry urgency.
+
+**Methodology page**: separate static page, same *idea* as
+`f1-predictor/docs/methodology.html` (data generation approach, feature engineering,
+train/test split, per-distance eval metrics, reproducibility seed) but **visually
+distinct** — matches the dashboard's own topographic identity, not F1's, per Rob's
+explicit correction during scoping ("I do not want it to look like f1 predictor.
+I repeat, different.").
 
 ## Preferences to respect going forward
 
