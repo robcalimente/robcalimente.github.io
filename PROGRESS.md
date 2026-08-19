@@ -287,16 +287,82 @@ working reliably; no need to switch to Actions-based deploy unless there's a rea
   Treat this card's voice as a deliberate one-off, not a signal to make other cards
   funnier too, unless Rob asks for that explicitly.
 
+- [x] **tri-dashboard — built and live (2026-08-18).** New repo
+      [`tri-dashboard`](https://github.com/robcalimente/tri-dashboard), demo at
+      https://robcalimente.github.io/tri-dashboard/. Built end-to-end from the scoped
+      plan below (grill-me session, 2026-08-09) in one session: Python synthetic-data
+      generator, LightGBM quantile model, React dashboard. Portfolio card updated to
+      `status: 'built'` with real links.
+
+  **Data generation** (`data-gen/`): 2,500 synthetic athletes across the 4 distances,
+  training-plan structure (weekly volume by phase, taper length, brick frequency)
+  sourced from TriCoach's real `RaceDistance`/`PlanGenerator` numbers, reimplemented as
+  a simplified Python model per the original scope. Found and fixed a real bug during
+  build: `_threshold_value()`'s returned tuple was unpacked into a variable named
+  `faster_is_lower` but the function actually returned `higher_is_better` — inverted
+  boolean sense meant easy/long sessions were coming out *faster* than threshold pace
+  (physiologically backwards). Caught by inspecting actual generated paces, not by
+  eyeballing — worth remembering: always sanity-check synthetic physiological data
+  against real-world plausibility (checked race finish times against known age-group
+  ranges too, e.g. IM ~11-17hrs, which the sprint/olympic/half/full medians all landed
+  inside).
+
+  **Model** (`model/`): single LightGBM model, quantile regression (p10/p50/p90), race
+  distance as an ordinal input feature (not one-hot/native-categorical) specifically so
+  every tree split is a plain numeric `<=` comparison — this is what let the exported
+  model run via a ~20-line hand-rolled JS tree-walker in the browser instead of
+  onnxruntime-web/WASM. MAE lands at 2.4-2.8% of finish time per distance, p10-p90
+  coverage ~70-86% (close to nominal 80% after a regularization tuning pass — more
+  trees/leaves overfit and narrowed the interval below target coverage). Verified the
+  JS tree-walker byte-for-byte against LightGBM's own `predict()` output (0.0 diff)
+  before wiring it into the frontend.
+
+  **A real modeling bug surfaced during browser QA, not during training**: three
+  independently-trained quantile models (p10/p50/p90) aren't constrained to stay
+  ordered — quantile crossing. Under cross-distance extrapolation (e.g. predicting a
+  sprint-trained athlete's Full Ironman time) this occasionally produced a p50 wildly
+  outside the p10-p90 band, which cascaded into a UI bug: the range-bar's percentage
+  math positioned the p50 marker at `left: 261%`, blowing out the page's horizontal
+  scroll width. Fixed with the standard practical fix — sort `[p10, p50, p90]` in
+  `predict.js` after inference. Worth remembering for any future quantile-regression
+  work: always sort/clip predicted quantiles before using them positionally, don't
+  assume the model respects its own ordering, especially under extrapolation.
+
+  **Frontend** (`frontend/`): React + Vite, elevation-profile/topographic visual
+  identity (contour-line SVG background, terrain-gradient CTL/ATL chart, discipline
+  colors) — deliberately distinct from `f1-predictor`'s timing-tower look, per Rob's
+  explicit correction during the original scoping session. Dashboard shows one
+  hand-picked exemplar athlete per distance (median-ish on adherence/aerobic_capacity,
+  not a best-case cherry-pick) with training load, workout history + per-session HR/
+  pace detail charts, and a live predictor panel — 3 sliders (threshold pace/power,
+  aerobic durability, weekly volume) recompute all 4 distances' predictions in the
+  browser on every change. Separate Methodology page, visually distinct from
+  `f1-predictor/docs/methodology.html` per Rob's explicit instruction during scoping.
+
+  **QA process worth repeating**: the Claude-in-Chrome browser extension wasn't
+  connected this session, so verification used a throwaway Playwright install in the
+  scratchpad directory (headless Chromium screenshots + a `document.documentElement
+  .scrollWidth` check) instead of skipping visual verification — this is how the
+  quantile-crossing bug above was actually caught, it would not have been visible from
+  code review alone. Also caught and fixed: the contour-background SVG's ring paths
+  extend outside their `viewBox` by design (for the `preserveAspectRatio="slice"` crop)
+  but need explicit `overflow: hidden` on the SVG element or they aren't clipped and
+  silently blow out the page's scroll width — a second, unrelated contributor to the
+  same visual symptom (dead space on the right) that had to be isolated from the
+  quantile-crossing bug via `getBoundingClientRect()` on real (non-SVG-descendant)
+  elements, since SVG children's bounding rects ignore ancestor `overflow` clipping
+  entirely, which made the first diagnostic pass misleading.
+
+  Deployed via the same `gh-pages`-package-to-`gh-pages`-branch flow as
+  `f1-predictor`/`catan-generator`. Repo defaulted to a `master` branch on `git init`;
+  renamed to `main` post-hoc (`gh repo edit --default-branch main` + delete `master`)
+  to match every other project repo's convention — worth using `git init -b main` or
+  equivalent up front next time to skip that step.
+
 ## Not done yet — in priority order
 
-1. **`tri-dashboard`** — triathlon training dashboard + predictive finish-time model,
-   built on **synthetic data** (not a live intervals.icu pull — that plan was
-   superseded on 2026-08-09, see scoped plan below for why). Fully scoped via a
-   grill-me session on 2026-08-09; see
-   "`tri-dashboard` — scoped plan" below for the full spec. Not yet built.
-
-   This is now the only remaining "not done" item — everything else that was in this
-   list (TriCoach card, Healthcare RAG, Catan) shipped. Natural next thing to pick up.
+Nothing currently queued. `tri-dashboard` was the last item on the prior list — ask
+Rob what's next before starting something unprompted.
 
 ### Catan board generator — scoped plan (from 2026-08-07 grill-me session, built same day)
 
