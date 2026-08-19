@@ -33,12 +33,12 @@ export const projects = [
   {
     id: 'tri-dashboard',
     title: 'Triathlon Training Dashboard',
-    tagline: 'A web view into real training load and pace trends, powered by the same data as TriCoach',
-    tags: ['React', 'Data Viz', 'API'],
-    status: 'planned',
+    tagline: 'A synthetic-data training dashboard with a client-side ML finish-time predictor',
+    tags: ['React', 'LightGBM', 'Data Viz'],
+    status: 'built',
     summary:
-      'Pulls from the intervals.icu API to visualize workout history, pace/power trends over time, and CTL/ATL/TSB training load. A browser-based companion to the TriCoach iOS app.',
-    links: { repo: '', demo: '' },
+      'A portfolio companion to TriCoach, built on synthetic data rather than a live intervals.icu pull, since that would mean exposing personal training data or building a visitor auth flow. 2,500 synthetic athletes, generated from real training-plan numbers sourced from TriCoach itself, train a LightGBM quantile-regression model (p10/p50/p90) that predicts finish time across all four race distances at once and runs entirely client-side in the browser, no backend, via a hand-rolled JS tree-walker over the exported model. Drag the sliders and watch predictions update live. Per-distance accuracy is reported honestly on the site\'s own methodology page, extrapolations included.',
+    links: { repo: 'https://github.com/robcalimente/tri-dashboard', demo: 'https://robcalimente.github.io/tri-dashboard/' },
   },
   {
     id: 'catan-generator',
